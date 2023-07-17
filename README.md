@@ -37,17 +37,22 @@ The target to predict in this year's (2020) competition is binary-benign (i.e. n
 
 The fact that diagnosis was the target to predict in last year's competition (including 2018 and 2019) makes this choice more logical. There is a small problem though. The set of diagnosis is different between this year and last year. We solved it by mapping this year's diagnosis to last year's according to the descriptions on last year's website. See Table 1 for the mapping. There are 9 target values in most of our models. In one model, we only used 4 target values (NV, MEL, BKL and Unknown) by mapping the other five (*) to Unknown.
 
-2019 Diagnosis	2020 Diagnosis	Target
-NV	nevus	NV
-MEL	melanoma	MEL
-BCC		BCC*
-BKL	seborrheic keratosis
-lichenoid keratosis
-solar lentigo
-lentigo NOS	BKL
-AK		AK*
-SCC		SCC*
-VASC		VASC*
-DF		DF*
-cafe-au-lait macule
-atypical melanocytic proliferation	Unknown
+## Data Augmentation
+In a small size dataset, image augmentation is required to avoid overfitting the training dataset. After data aggregation, we have around 46k images in the training set. The dataset contains significant class imbalance, with most of the classes have an "Unknown" category (Table 2). We have defined our augmentation pipeline to deal with the class imbalance. The augmentation that helps to improve the prediction accuracy of the model is selected. The selected augmentation are as follows:
+
+**Transpose:** A spatial level transformation that transposes image by swapping rows and columns.
+Flip: A spatial level transformation that flip image either/both horizontally and/or vertically. Images are randomly flipped either horizontally or vertically to make the model more robust.
+**Rotate:** A spatial level transformation that randomly turns images for uniform distribution. Random rotation allows the model to become invariant to the object orientation.
+**RandomBrightness:** A pixel-level transformation that randomly changes the brightness of the image. As in real life, we do not have object under perfect lighting conditions and this augmentation help to mimic real-life scenarios.
+**RandomContrast:** A pixel-level transformation that randomly changes the contrast of the input image. As in real life, we do not have object under perfect lighting conditions and this augmentation help to mimic real-life scenarios.
+**MotionBlur:** A pixel-level transformation that applies motion blur using a random-sized kernel.
+**MedianBlur:** A pixel-level transformation that blurs input image using a median filter.
+**GaussianBlur:** A pixel-level transformation that blurs input image using a gaussian filter.
+**GaussNoise:** A pixel-level transformation that applies Gaussian noise to the image. This augmentation will simulate the measurement noise while taking the images
+**OpticalDistortion:** Optical distortion is also known as Lens error. It mimics the lens distortion effect.
+**GridDistortion:** An image warping technique driven by mapping between equivalent families of curves or edges arranged in a grid structure.
+**ElasticTransform:** A pixel-level transformation that divides the images into multiple grids and, based on edge displacement, the grid will be distorted. This transform helps the network to have a better understanding of edges while training.
+**CLAHE:** A pixel-level transformation that applies Contrast Limited Adaptive Histogram Equalization to the input image. This augmentation improves the contrast of the images.
+**HueSaturationValue:** A pixel-level transformation that randomly changes hue, saturation and value of the input image.
+**ShiftScaleRotate:** A spatial level transformation that randomly applies affine transforms: translate, scale and rotate the input. The allow scale and rotate the image by certain angles
+**Cutout:** A spatial level transformation that does a rectangular cut in the image. This transformation helps the network to focus on the different areas in the images.
