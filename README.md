@@ -24,4 +24,30 @@ The project dataset is openly available on Kaggle (**SIIM-ISIC Melanoma Classifi
 
 Furthermore, thirty-three thousand are in training set among the forty-four thousand images and around eleven thousand in the test set. However, our quick analysis found a significant class imbalance in the training dataset. Thirty-two thousand are labelled as benign (Not Cancerous) and only five hundred marked as malignant (Cancerous). That is, the training set contains only ±1.76% of malignant images (Figure 1). Along with the patient's images, the dataset also has a CSV file containing a detail about patient-level contextual information, which includes patient id, gender, patient age, location of benign/malignant site, and indicator of malignancy for the imaged lesion.
 
-Class Imbalance
+## Data Pre-Processing
+In any machine learning project, it is critical to set up a trustworthy validation scheme, in order to properly evaluate and compare models. This is especially true if the dataset is small to medium size, or the evaluation metric is unstable, which is the case of this project.
+
+There are 33k images in train data. However, only 1.76% are positive samples (i.e., malignant). The small number of positives causes the AUC metric to be very unstable, even with 5-fold cross validation.
+
+Our solution to this problem is to use both last year (including 2018 and 2019) and this year's data (2020). Even though last year's data is smaller (25k), it has 10 times (17.85%) the positive sample ratio, making the metrices much more stable.
+
+For a typical image classification problem, the standard approach is to take a deep CNN model (such as the most popular EffcientNet) trained on ImageNet, replace the last layer so that the output dimension equals the target's dimension, and fine tune it on the specific dataset.
+
+The target to predict in this year's (2020) competition is binary-benign (i.e. no melanoma) or malignant (i.e. melanoma). We noticed that the target information is included in the diagnosis column: target is malignant if and only if diagnosis is melanoma. But diagnosis column is more granular when an image is benign. We believed using diagnosis as target to train the model could give the model more information.
+
+The fact that diagnosis was the target to predict in last year's competition (including 2018 and 2019) makes this choice more logical. There is a small problem though. The set of diagnosis is different between this year and last year. We solved it by mapping this year's diagnosis to last year's according to the descriptions on last year's website. See Table 1 for the mapping. There are 9 target values in most of our models. In one model, we only used 4 target values (NV, MEL, BKL and Unknown) by mapping the other five (*) to Unknown.
+
+2019 Diagnosis	2020 Diagnosis	Target
+NV	nevus	NV
+MEL	melanoma	MEL
+BCC		BCC*
+BKL	seborrheic keratosis
+lichenoid keratosis
+solar lentigo
+lentigo NOS	BKL
+AK		AK*
+SCC		SCC*
+VASC		VASC*
+DF		DF*
+cafe-au-lait macule
+atypical melanocytic proliferation	Unknown
