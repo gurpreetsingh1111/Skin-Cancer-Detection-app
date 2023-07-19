@@ -58,4 +58,3 @@ Flip: A spatial level transformation that flip image either/both horizontally an
 * **Cutout:** A spatial level transformation that does a rectangular cut in the image. This transformation helps the network to focus on the different areas in the images.
 
 
-https://github.com/gurpreetsingh1111/Skin-Cancer-Detection-app/blob/main/Agumented_Image/5%20(1).jpg
