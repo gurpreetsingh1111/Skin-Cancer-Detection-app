@@ -56,3 +56,7 @@ Flip: A spatial level transformation that flip image either/both horizontally an
 * **HueSaturationValue:** A pixel-level transformation that randomly changes hue, saturation and value of the input image.
 * **ShiftScaleRotate:** A spatial level transformation that randomly applies affine transforms: translate, scale and rotate the input. The allow scale and rotate the image by certain angles
 * **Cutout:** A spatial level transformation that does a rectangular cut in the image. This transformation helps the network to focus on the different areas in the images.
+![Uploading 5.jpg…]()
+
+
+
